@@ -71,7 +71,19 @@ void setup() {
 	}
 
 	// Generate filename
-	sprintf(filename, "%d_%d_%d_%d_%d_%d.json", year(), month(), day(), hour(), minute(), second());
+	if (
+		sprintf(
+			filename, 
+			"%d_%d_%d_%d_%d_%d.json", 
+			year(), 
+			month(), 
+			day(), 
+			hour(), 
+			minute(), 
+			second()
+		) < 0) {
+		Serial.println("Error: failed to generate filename");
+	}
 
     //Create the File
     outFile = sd.open(filename, FILE_WRITE);
@@ -87,5 +99,24 @@ void setup() {
 }
 
 void loop() {
-    
+	char message[255];
+	sprintf(
+		message,
+		"{time:%d-%d-%d %d:%d:%d, rpm:%d, oilTemp:%f, waterTemp:%f, brakeTemp:%d, gear:%d, speed:%d, voltage:%f, fanOn:%d}",
+		day(),
+		month(),
+		year(),
+		hour(),
+		minute(),
+		second(),
+		rpm,
+		oilTemp,
+		waterTemp,
+		brakeTemp,
+		gear,
+		speed,
+		voltage,
+		fanOn
+	);
+	outFile.println(message);
 }
