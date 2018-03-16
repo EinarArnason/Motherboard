@@ -8,6 +8,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <TimeLib.h>
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
@@ -21,6 +22,9 @@
 >>>>>>> Added timestamp code and filename format
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
+=======
+#include <TimeLib.h>
+>>>>>>> Added timestamp code and filename format
 #include "constants.h"
 
 // SD card variables
@@ -31,6 +35,7 @@ File outFile;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 char filename[20];
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
@@ -44,6 +49,9 @@ char filename[20];
 >>>>>>> Added timestamp code and filename format
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
+=======
+char filename[20];
+>>>>>>> Added timestamp code and filename format
 
 // CAN BUS driver
 class CanListener : public CANListener {
@@ -88,6 +96,9 @@ bool CanListener::frameHandler(CAN_message_t &frame, int mailbox, uint8_t contro
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Added timestamp code and filename format
 =======
 >>>>>>> Added timestamp code and filename format
 =======
@@ -98,6 +109,7 @@ time_t getTeensy3Time() {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
 =======
@@ -108,6 +120,8 @@ time_t getTeensy3Time() {
 >>>>>>> Added timestamp code and filename format
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
+=======
+>>>>>>> Added timestamp code and filename format
 void setup() {
     //init SD Card
     if (!sd.begin())
@@ -121,6 +135,9 @@ void setup() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Added timestamp code and filename format
 =======
 >>>>>>> Added timestamp code and filename format
 =======
@@ -135,6 +152,7 @@ void setup() {
 	}
 
 	// Generate filename
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	if (
@@ -177,6 +195,12 @@ void setup() {
     //Create the File
     outFile = sd.open(str, FILE_WRITE);
 >>>>>>> Added Added CAN BUS and SD card initialization
+=======
+	sprintf(filename, "%d_%d_%d_%d_%d_%d.json", year(), month(), day(), hour(), minute(), second());
+
+    //Create the File
+    outFile = sd.open(filename, FILE_WRITE);
+>>>>>>> Added timestamp code and filename format
     if (!outFile) {
         Serial.println("Error: failed to open file");
         return;
@@ -189,6 +213,7 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -229,4 +254,7 @@ void loop() {
 =======
     runShiftRegister();
 >>>>>>> Added Added CAN BUS and SD card initialization
+=======
+    
+>>>>>>> Added timestamp code and filename format
 }
