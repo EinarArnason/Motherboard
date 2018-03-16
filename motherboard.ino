@@ -9,6 +9,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <TimeLib.h>
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
@@ -25,6 +26,8 @@
 =======
 #include <TimeLib.h>
 >>>>>>> Added timestamp code and filename format
+=======
+>>>>>>> Added Added CAN BUS and SD card initialization
 #include "constants.h"
 
 // SD card variables
@@ -36,6 +39,7 @@ File outFile;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 char filename[20];
 =======
 >>>>>>> Added Added CAN BUS and SD card initialization
@@ -52,6 +56,8 @@ char filename[20];
 =======
 char filename[20];
 >>>>>>> Added timestamp code and filename format
+=======
+>>>>>>> Added Added CAN BUS and SD card initialization
 
 // CAN BUS driver
 class CanListener : public CANListener {
@@ -97,6 +103,7 @@ bool CanListener::frameHandler(CAN_message_t &frame, int mailbox, uint8_t contro
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Added timestamp code and filename format
 =======
@@ -122,6 +129,8 @@ time_t getTeensy3Time() {
 >>>>>>> Added Added CAN BUS and SD card initialization
 =======
 >>>>>>> Added timestamp code and filename format
+=======
+>>>>>>> Added Added CAN BUS and SD card initialization
 void setup() {
     //init SD Card
     if (!sd.begin())
@@ -130,6 +139,7 @@ void setup() {
         while (1);
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -201,6 +211,10 @@ void setup() {
     //Create the File
     outFile = sd.open(filename, FILE_WRITE);
 >>>>>>> Added timestamp code and filename format
+=======
+    //Create the File
+    outFile = sd.open(str, FILE_WRITE);
+>>>>>>> Added Added CAN BUS and SD card initialization
     if (!outFile) {
         Serial.println("Error: failed to open file");
         return;
@@ -213,6 +227,7 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -257,4 +272,7 @@ void loop() {
 =======
     
 >>>>>>> Added timestamp code and filename format
+=======
+    runShiftRegister();
+>>>>>>> Added Added CAN BUS and SD card initialization
 }
