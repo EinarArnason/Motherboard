@@ -3,13 +3,19 @@
 #include <kinetis_flexcan.h>
 #include <FlexCAN.h>
 #include <SdFat.h>
+<<<<<<< HEAD
 #include <TimeLib.h>
+=======
+>>>>>>> Added Added CAN BUS and SD card initialization
 #include "constants.h"
 
 // SD card variables
 SdFat sd;
 File outFile;
+<<<<<<< HEAD
 char filename[20];
+=======
+>>>>>>> Added Added CAN BUS and SD card initialization
 
 // CAN BUS driver
 class CanListener : public CANListener {
@@ -49,10 +55,13 @@ bool CanListener::frameHandler(CAN_message_t &frame, int mailbox, uint8_t contro
 	return true;
 }
 
+<<<<<<< HEAD
 time_t getTeensy3Time() {
 	return Teensy3Clock.get();
 }
 
+=======
+>>>>>>> Added Added CAN BUS and SD card initialization
 void setup() {
     //init SD Card
     if (!sd.begin())
@@ -61,6 +70,7 @@ void setup() {
         while (1);
     }
 
+<<<<<<< HEAD
 	// set the Time library to use Teensy 3.0's RTC to keep time
 	setSyncProvider(getTeensy3Time);
 	if (timeStatus() != timeSet) {
@@ -87,6 +97,10 @@ void setup() {
 
     //Create the File
     outFile = sd.open(filename, FILE_WRITE);
+=======
+    //Create the File
+    outFile = sd.open(str, FILE_WRITE);
+>>>>>>> Added Added CAN BUS and SD card initialization
     if (!outFile) {
         Serial.println("Error: failed to open file");
         return;
@@ -99,6 +113,7 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
 	char message[255];
 	sprintf(
 		message,
@@ -119,4 +134,7 @@ void loop() {
 		fanOn
 	);
 	outFile.println(message);
+=======
+    runShiftRegister();
+>>>>>>> Added Added CAN BUS and SD card initialization
 }
