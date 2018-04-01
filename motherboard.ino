@@ -1,3 +1,14 @@
+/******************************************************************
+Team Sleipnir communications motherboard
+
+Hardware:
+- Teensy 3.6
+- XBee-PRO S2C
+- MCP2551 CAN transceiver
+
+Written by Einar Arnason
+******************************************************************/
+
 #include <SPI.h>
 #include <stdint.h>
 #include <kinetis_flexcan.h>
