@@ -9,9 +9,9 @@ Hardware:
 Written by Einar Arnason
 ******************************************************************/
 
-#include <SPI.h>
+#include <XBee.h>
+#include <SoftwareSerial.h>
 #include <stdint.h>
-#include <kinetis_flexcan.h>
 #include <FlexCAN.h>
 #include <SdFat.h>
 #include <TimeLib.h>
@@ -22,6 +22,15 @@ SdFat sd;
 File outFile;
 char filename[20];
 
+// XBee driver
+XBee xbee = XBee();
+uint8_t payload[] = "Testing!";
+
+// SH + SL Address of receiving XBee
+XBeeAddress64 addr64 = XBeeAddress64(0xFF, 0xFE);
+ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
+ZBTxStatusResponse txStatus = ZBTxStatusResponse();
+
 // CAN BUS driver
 class CanListener : public CANListener {
 public:
@@ -30,7 +39,6 @@ public:
 };
 
 CanListener canListener;
-unsigned int txTimer, rxTimer;
 
 // Vehicle values
 uint16_t rpm;
@@ -65,11 +73,12 @@ time_t getTeensy3Time() {
 }
 
 void setup() {
+	/*
     //init SD Card
-    if (!sd.begin())
+    while (!sd.begin())
     {
         Serial.println("Error: SD connection failed");
-        while (1);
+		delay(1000);
     }
 
 	// set the Time library to use Teensy 3.0's RTC to keep time
@@ -95,8 +104,45 @@ void setup() {
 	Can0.begin(500000);
 	Can0.attachObj(&canListener);
 	canListener.attachGeneralHandler();
+	*/
+
+	Serial.begin(9600);
+
+	// Initialize XBee serial
+	Serial1.begin(9600);
+	xbee.setSerial(Serial1);
 }
 
 void loop() {
-    
+
+	xbee.send(zbTx);
+	// after sending a tx request, we expect a status response
+	// wait up to half second for the status response
+	if (xbee.readPacket(500)) {
+		// got a response!
+
+		// should be a znet tx status            	
+		if (xbee.getResponse().getApiId() == ZB_TX_STATUS_RESPONSE) {
+			xbee.getResponse().getZBTxStatusResponse(txStatus);
+
+			// get the delivery status, the fifth byte
+			if (txStatus.getDeliveryStatus() == SUCCESS) {
+				// success.  time to celebrate
+				Serial.println("Success!");
+			}
+			else {
+				// the remote XBee did not receive our packet. is it powered on?
+				Serial.println("Fail!");
+			}
+		}
+	}
+	else if (xbee.getResponse().isError()) {
+		Serial.print("Error reading packet.  Error code: ");  
+		Serial.println(xbee.getResponse().getErrorCode());
+	}
+	else {
+		// local XBee did not provide a timely TX Status Response -- should not happen
+		Serial.println("Time Fail!");
+	}
+	delay(1000);
 }
