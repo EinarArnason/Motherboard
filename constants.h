@@ -16,3 +16,5 @@ inline float CANKelvinToFloat(uint16_t kelvinValue) {
 
 	return result;
 }
+
+const int PAYLOAD_SIZE = 119;

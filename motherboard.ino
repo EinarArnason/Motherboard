@@ -24,12 +24,10 @@ char filename[20];
 
 // XBee driver
 XBee xbee = XBee();
-uint8_t payload[] = "Testing!";
 
 // SH + SL Address of receiving XBee
 XBeeAddress64 addr64 = XBeeAddress64(0xFF, 0xFE);
-ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
-ZBTxStatusResponse txStatus = ZBTxStatusResponse();
+char payload[PAYLOAD_SIZE];
 
 // CAN BUS driver
 class CanListener : public CANListener {
@@ -70,6 +68,16 @@ bool CanListener::frameHandler(CAN_message_t &frame, int mailbox, uint8_t contro
 
 time_t getTeensy3Time() {
 	return Teensy3Clock.get();
+}
+
+uint8_t payloadLength() {
+	for (int i = 0; i < PAYLOAD_SIZE; i++) {
+		if (payload[i] == '!') {
+			return i;
+		}
+	}
+
+	return PAYLOAD_SIZE;
 }
 
 void setup() {
@@ -115,6 +123,14 @@ void setup() {
 
 void loop() {
 
+	sprintf(payload, 
+		"{\"rpm\": %d, \"speed\": %d, \"oilTemp\": %0.2f, \"waterTemp\": %0.2f, \"volt\": %0.2f}!", 
+		random(2000, 14000), random(0, 255), 
+		random(3000, 8000) / 100.0, 
+		random(3000, 8000) / 100.0, 
+		random(1160, 1290) / 100.0);
+	ZBTxRequest zbTx = ZBTxRequest(addr64, (uint8_t*)payload, payloadLength());
+	ZBTxStatusResponse txStatus = ZBTxStatusResponse();
 	xbee.send(zbTx);
 	// after sending a tx request, we expect a status response
 	// wait up to half second for the status response
@@ -142,7 +158,7 @@ void loop() {
 	}
 	else {
 		// local XBee did not provide a timely TX Status Response -- should not happen
-		Serial.println("Time Fail!");
+		Serial.println("local XBee did not provide a timely TX Status Response");
 	}
 	delay(1000);
 }
