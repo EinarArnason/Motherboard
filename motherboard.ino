@@ -107,12 +107,12 @@ void setup() {
         Serial.println("Error: failed to open file");
         return;
     };
+	*/
 
     // Initialize the CAN bus
 	Can0.begin(500000);
 	Can0.attachObj(&canListener);
 	canListener.attachGeneralHandler();
-	*/
 
 	Serial.begin(9600);
 
@@ -125,10 +125,12 @@ void loop() {
 
 	sprintf(payload, 
 		"{\"rpm\": %d, \"speed\": %d, \"oilTemp\": %0.2f, \"waterTemp\": %0.2f, \"volt\": %0.2f}!", 
-		random(2000, 14000), random(0, 255), 
-		random(3000, 8000) / 100.0, 
-		random(3000, 8000) / 100.0, 
-		random(1160, 1290) / 100.0);
+		rpm, 
+		speed, 
+		oilTemp, 
+		waterTemp,
+		voltage);
+
 	ZBTxRequest zbTx = ZBTxRequest(addr64, (uint8_t*)payload, payloadLength());
 	ZBTxStatusResponse txStatus = ZBTxStatusResponse();
 	xbee.send(zbTx);
@@ -160,5 +162,5 @@ void loop() {
 		// local XBee did not provide a timely TX Status Response -- should not happen
 		Serial.println("local XBee did not provide a timely TX Status Response");
 	}
-	delay(1000);
+	delay(10);
 }
