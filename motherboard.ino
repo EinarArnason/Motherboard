@@ -11,7 +11,6 @@ Written by Einar Arnason
 ******************************************************************/
 
 #include <XBee.h>
-#include <SoftwareSerial.h>
 #include <stdint.h>
 #include <FlexCAN.h>
 #include <SdFat.h>
@@ -32,7 +31,7 @@ boolean usingInterrupt = false;
 void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
 
 // SD card variables
-SdFat sd;
+SdFatSdio sd;
 File outFile;
 char filename[20];
 
@@ -61,6 +60,8 @@ uint8_t gear;
 uint16_t speed;
 float voltage;
 bool fanOn;
+float ecuTemp;
+float airTemp;
 
 bool CanListener::frameHandler(CAN_message_t &frame, int mailbox, uint8_t controller) {
 
@@ -74,6 +75,8 @@ bool CanListener::frameHandler(CAN_message_t &frame, int mailbox, uint8_t contro
 	case 2:
 		oilTemp = CANKelvinToFloat(frame.buf[0] | (frame.buf[1] << 8));
 		gear = frame.buf[2] | (frame.buf[3] << 8);
+		airTemp = CANKelvinToFloat(frame.buf[4] | (frame.buf[5] << 8));
+		ecuTemp = CANKelvinToFloat(frame.buf[6] | (frame.buf[7] << 8));
 		break;
 	}
 
@@ -281,5 +284,4 @@ void loop() {
 		// local XBee did not provide a timely TX Status Response -- should not happen
 		Serial.println("local XBee did not provide a timely TX Status Response");
 	}
-	delay(10);
 }
